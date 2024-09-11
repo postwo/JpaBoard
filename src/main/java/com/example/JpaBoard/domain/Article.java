@@ -27,6 +27,7 @@ import java.util.Set;
 @Entity
 public class Article {
 
+    //id에는 setter를 설정 안하는이유는 내가 설정하는게 아니라 jpa에서만 설정 가능하게 해주기 위해
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -67,6 +68,8 @@ public class Article {
         return new Article(title, content, hashtag);
     }
 
+
+    // equals and hashcode는 어노테이션으로도 처리 할 수 있지만 이렇게 직접 만든 이유는 전부다 동등성을 비교할필요없이 유니크한 id값으로만 비교해보면 되기 때문이다.
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
