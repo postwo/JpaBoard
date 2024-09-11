@@ -38,6 +38,8 @@ public class Article {
 
     @Setter private String hashtag; // 해시태그
 
+    /* 이걸 건 이유는 순환 참조를 막기위해서다(tostring을 끊어 버린다) == 순환참조란 Article entity에서 Tostring이 있는데
+    여기 entity에서도 tostring이 있기 때문에 계속 무한 참조가 되는 현상을 말한다.*/
     @ToString.Exclude
     @OrderBy("id")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
