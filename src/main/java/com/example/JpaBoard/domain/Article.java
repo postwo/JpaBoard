@@ -4,13 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -23,9 +17,8 @@ import java.util.Set;
         @Index(columnList = "createdAt"),
         @Index(columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Article {
+public class Article extends AuditingFields{
 
     //id에는 setter를 설정 안하는이유는 내가 설정하는게 아니라 jpa에서만 설정 가능하게 해주기 위해
     @Id
@@ -44,18 +37,6 @@ public class Article {
     @OrderBy("id")
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
-
-    @CreatedDate
-    @Column(nullable = false) private LocalDateTime createdAt; // 생성일시
-
-    @CreatedBy
-    @Column(nullable = false, length = 100) private String createdBy; // 생성자
-
-    @LastModifiedDate
-    @Column(nullable = false) private LocalDateTime modifiedAt; // 수정일시
-
-    @LastModifiedBy
-    @Column(nullable = false, length = 100) private String modifiedBy; // 수정자
 
 
     protected Article() {}
