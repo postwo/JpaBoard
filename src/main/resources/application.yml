@@ -25,3 +25,6 @@ spring:
       hibernate.default_batch_fetch_size: 100
   h2.console.enabled: false # h2 데이터베이스 사용할때 true로 설정하면 된다
   sql.init.mode: always
+  data.rest:
+      base-path: /api
+      detection-strategy: annotated #default(기본값),ALL(전부다),annotated(어노테이션(@repository)으로 지정한것만),visibilty(public으로 오픈한것만)  #repository를 노출시킬건지 정하는 용도
