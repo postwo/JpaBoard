@@ -1,5 +1,6 @@
 package com.example.JpaBoard.controller;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
+@Disabled("Spring Data Rest 통합테스트 불필요하므로 제외시킴 ")// 해당 테스트클래스에 밑의 있는 메서드들을 실행하지 못하게 한다
 @DisplayName("Data REST - API 테스트")
 @Transactional
 @AutoConfigureMockMvc
