@@ -38,7 +38,7 @@ class ArticleControllerTest {
                 .andExpect(model().attributeExists("articles")); //articles이 이름의 키가있는지 또는 데이터가 있는지 확인
     }
 
-    @Disabled("구현 중")
+
     @DisplayName("[view][GET] 게시글 상세 페이지 - 정상 호출")
     @Test
     public void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
