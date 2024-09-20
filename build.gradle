@@ -30,7 +30,12 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// 타임리프
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// configuration
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 
 	// 스프링 부트 3.0 미만
