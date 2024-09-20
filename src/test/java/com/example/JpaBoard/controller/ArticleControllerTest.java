@@ -24,8 +24,7 @@ class ArticleControllerTest {
     }
 
 
-    //media type 검사에서 부가적인 옵션이 들어갈 수 있음을 확인했기 때문에 contentType대신 contentTypeCompatibleWith으로 변경해서 호환되는 타입까지 맞다고 하게 해준다
-    // charset == utf8이 옵션을 붙어도 동작테스트 할수 있게 contentType대신 contentTypeCompatibleWith으로 변경해준다
+    //media type 검사에서 부가적인 옵션이 들어갈 수 있음을 확인했기 때문에 contentType대신 contentTypeCompatibleWith으로 변경해서 호환되는 타입까지 맞다고 하게 해준다 
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
     @Test
     public void givenNothing_whenRequestingArticlesView_thenReturnsArticlesView() throws Exception {
@@ -46,7 +45,7 @@ class ArticleControllerTest {
         // When & Then
         mvc.perform(get("/articles/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().contentType(MediaType.TEXT_HTML))
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("articleComments")); //댓글(1개 or 여러개)도 추가
@@ -61,7 +60,7 @@ class ArticleControllerTest {
         // When & Then
         mvc.perform(get("/articles/search"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().contentType(MediaType.TEXT_HTML))
                 .andExpect(model().attributeExists("articles/search")); //게시글
 
     }
@@ -74,7 +73,7 @@ class ArticleControllerTest {
         // When & Then
         mvc.perform(get("/articles/search-hashtag"))
                 .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(content().contentType(MediaType.TEXT_HTML))
                 .andExpect(model().attributeExists("articles/search-hashtag")); //해시태그
 
     }
