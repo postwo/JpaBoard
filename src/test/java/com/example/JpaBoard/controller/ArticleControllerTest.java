@@ -23,7 +23,8 @@ class ArticleControllerTest {
         this.mvc = mvc;
     }
 
-    @Disabled("구현 중")
+
+    //media type 검사에서 부가적인 옵션이 들어갈 수 있음을 확인했기 때문에 contentType대신 contentTypeCompatibleWith으로 변경해서 호환되는 타입까지 맞다고 하게 해준다 
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
     @Test
     public void givenNothing_whenRequestingArticlesView_thenReturnsArticlesView() throws Exception {
@@ -31,7 +32,7 @@ class ArticleControllerTest {
         // When & Then
         mvc.perform(get("/articles"))
                 .andExpect(status().isOk()) //status ok인지 확인
-                .andExpect(content().contentType(MediaType.TEXT_HTML)) //content 내용의 타입이 뷰니까 TEXT_HTML인지 확인
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML)) //content 내용의 타입이 뷰니까 TEXT_HTML인지 확인 //contentTypeCompatibleWith은 호환되는 타입까지 맞다고 해준다
                 .andExpect(view().name("articles/index"))//뷰 이름에대해 테스트 있는지 확인
                 .andExpect(model().attributeExists("articles")); //articles이 이름의 키가있는지 또는 데이터가 있는지 확인
     }
