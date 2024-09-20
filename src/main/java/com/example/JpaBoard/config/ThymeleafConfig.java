@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.spring6.templateresolver.SpringResourceTemplateResolver;
 
 @Configuration
-public class ThymeleafConfig {
+public class ThymeleafConfig { // 이걸 사용하는 이유는 th.xml 파일을 사용하여 템플릿 로직을 분리하고자 하는 것
 
     @Bean
     public SpringResourceTemplateResolver thymeleafTemplateResolver(
