@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @ToString
 @EntityListeners(AuditingEntityListener.class)
 @MappedSuperclass
-public class AuditingFields { // 자동으로 세팅할수 있게 하기 위해 setter를 추가 안한다
+public abstract class AuditingFields  { // 자동으로 세팅할수 있게 하기 위해 setter를 추가 안한다
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)// 파싱이 잘 될수 있게 추가
     @CreatedDate
