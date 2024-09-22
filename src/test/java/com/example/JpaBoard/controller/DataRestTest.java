@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @Disabled("Spring Data Rest 통합테스트 불필요하므로 제외시킴 ")// 해당 테스트클래스에 밑의 있는 메서드들을 실행하지 못하게 한다
 @DisplayName("Data REST - API 테스트")
@@ -87,6 +88,21 @@ public class DataRestTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.valueOf("application/hal+json")))
                 .andDo(print());
+    }
+
+
+    @DisplayName("[api] 회원 관련 API 는 일체 제공하지 않는다.")
+    @Test
+    void givenNothing_whenRequestingUserAccounts_thenThrowsException() throws Exception {
+        // Given
+
+        // When & Then 유저 정보는 안보여준다 == 404가 떨어지게 한다
+        mvc.perform(get("/api/userAccounts")).andExpect(status().isNotFound());
+        mvc.perform(post("/api/userAccounts")).andExpect(status().isNotFound());
+        mvc.perform(put("/api/userAccounts")).andExpect(status().isNotFound());
+        mvc.perform(patch("/api/userAccounts")).andExpect(status().isNotFound());
+        mvc.perform(delete("/api/userAccounts")).andExpect(status().isNotFound());
+        mvc.perform(head("/api/userAccounts")).andExpect(status().isNotFound());
     }
 
 }
