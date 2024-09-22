@@ -1,10 +1,12 @@
 package com.example.JpaBoard.controller;
 
+import com.example.JpaBoard.config.SecurityConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -13,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @DisplayName("View 컨트롤러 - 게시글")
+@Import(SecurityConfig.class) //이걸 추가 안하면 401에러가 뜨면서 테스트 실패가 뜬다 (시큐리티를 추가했을경우 이걸 꼭 넣어줘야 한다)
 @WebMvcTest(ArticleController.class)
 class ArticleControllerTest {
 
