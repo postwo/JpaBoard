@@ -19,10 +19,16 @@ public class ArticleCommentService {
 
     //댓글 조회
     @Transactional(readOnly = true)
-    public List<ArticleCommentDto> searchArticleComment(Long articleId) {
+    public List<ArticleCommentDto> searchArticleComments(Long articleId) {
         return List.of();
     }
 
     public void saveArticleComment(ArticleCommentDto dto) {
+    }
+
+    public void updateArticleComment(ArticleCommentDto dto) {
+    }
+
+    public void deleteArticleComment(Long articleCommentId) {
     }
 }
