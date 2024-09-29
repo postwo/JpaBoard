@@ -73,7 +73,7 @@ class ArticleServiceTest {
         // When
         sut.saveArticle(ArticleDto.of(LocalDateTime.now(), "Uno", "title", "content", "#java"));
         // Then
-        then(articleRepository).should().save(any(Article.class));
+        then(articleRepository).should().save(any(Article.class)); //save를 한 번 호출 했는가를 검사
     }
 
 
