@@ -73,6 +73,7 @@ class ArticleControllerTest {
     }
 
 
+    
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 검색어와 함께 호출")
     @Test
     public void givenSearchKeyword_whenSearchingArticlesView_thenReturnsArticlesView() throws Exception {
