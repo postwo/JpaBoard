@@ -55,7 +55,7 @@ public class ArticleController {
 
     @GetMapping("/search-hashtag")
     public String searchHashtag(
-            @RequestParam(required = false) String searchValue,
+            @RequestParam(name = "searchValue", required = false) String searchValue,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map
     ) {
