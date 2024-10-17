@@ -1,4 +1,4 @@
-package com.example.JpaBoard.response;
+package com.example.JpaBoard.dto.response;
 
 import com.example.JpaBoard.dto.ArticleDto;
 
