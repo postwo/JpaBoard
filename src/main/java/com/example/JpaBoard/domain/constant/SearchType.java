@@ -1,4 +1,4 @@
-package com.example.JpaBoard.domain.type;
+package com.example.JpaBoard.domain.constant;
 
 import lombok.Getter;
 
