@@ -1,6 +1,7 @@
 package com.example.JpaBoard.controller;
 
 import com.example.JpaBoard.dto.UserAccountDto;
+import com.example.JpaBoard.dto.request.ArticleCommentRequest;
 import com.example.JpaBoard.service.ArticleCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
