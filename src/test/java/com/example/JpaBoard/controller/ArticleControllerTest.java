@@ -1,6 +1,6 @@
 package com.example.JpaBoard.controller;
 
-import com.example.JpaBoard.config.SecurityConfig;
+import com.example.JpaBoard.config.TestSecurityConfig;
 import com.example.JpaBoard.domain.constant.FormStatus;
 import com.example.JpaBoard.domain.constant.SearchType;
 import com.example.JpaBoard.dto.ArticleDto;
@@ -23,6 +23,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -38,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @DisplayName("View 컨트롤러 - 게시글")
-@Import({SecurityConfig.class, FormDataEncoder.class}) //이걸 추가 안하면 401에러가 뜨면서 테스트 실패가 뜬다 (시큐리티를 추가했을경우 이걸 꼭 넣어줘야 한다)
+@Import({TestSecurityConfig.class, FormDataEncoder.class}) //이걸 추가 안하면 401에러가 뜨면서 테스트 실패가 뜬다 (시큐리티를 추가했을경우 이걸 꼭 넣어줘야 한다)
 @WebMvcTest(ArticleController.class)
 class ArticleControllerTest {
 
@@ -135,7 +138,21 @@ class ArticleControllerTest {
     }
 
 
-    @DisplayName("[view][GET] 게시글 페이지 - 정상 호출")
+    @DisplayName("[view][GET] 게시글 페이지 - 인증 없을 땐 로그인 페이지로 이동")
+    @Test
+    void givenNothing_whenRequestingArticlePage_thenRedirectsToLoginPage() throws Exception {
+        // Given
+        long articleId = 1L;
+        // When & Then
+        mvc.perform(get("/articles/" + articleId))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
+        then(articleService).shouldHaveNoInteractions();
+        then(articleService).shouldHaveNoInteractions();
+    }
+
+    @WithMockUser
+    @DisplayName("[view][GET] 게시글 페이지 - 정상 호출, 인증된 사용자")
     @Test
     public void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         // Given
@@ -221,7 +238,7 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
 
-
+    @WithMockUser //가짜(Mock) 사용자 정보를 주입하여 인증이 필요한 테스트를 수행할 수 있게 해준다
     @DisplayName("[view][GET] 새 게시글 작성 페이지")
     @Test
     void givenNothing_whenRequesting_thenReturnsNewArticlePage() throws Exception {
@@ -234,7 +251,10 @@ class ArticleControllerTest {
                 .andExpect(model().attribute("formStatus", FormStatus.CREATE));
     }
 
-
+    //실제 지정한 유저 details를 사용할수 있다 대신 유저 정보가 실제로 db에 있어야 한다(mockdb일수도 있다)
+    //TEST_EXECUTION 이거는 테스트를 실행하기 직전에 이 setup을 시작하라는 뜻이다
+    // bean이 userdeatils가 하나만 있기 때문에 굳이 작성 할 필요가 없다 == (userDetailsServiceBeanName = "userDetailService")
+    @WithUserDetails(value = "unoTest",setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("[view][POST] 새 게시글 등록 - 정상 호출")
     @Test
     void givenNewArticleInfo_whenRequesting_thenSavesNewArticle() throws Exception {
@@ -255,7 +275,21 @@ class ArticleControllerTest {
     }
 
 
-    @DisplayName("[view][GET] 게시글 수정 페이지")
+    @DisplayName("[view][GET] 게시글 수정 페이지 - 인증 없을 땐 로그인 페이지로 이동")
+    @Test
+    void givenNothing_whenRequesting_thenRedirectsToLoginPage() throws Exception {
+        // Given
+        long articleId = 1L;
+        // When & Then
+        mvc.perform(get("/articles/" + articleId + "/form"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrlPattern("**/login"));
+        then(articleService).shouldHaveNoInteractions();
+    }
+
+
+    @WithMockUser
+    @DisplayName("[view][GET] 게시글 수정 페이지 - 정상 호출, 인증된 사용자")
     @Test
     void givenNothing_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
         // Given
@@ -272,7 +306,7 @@ class ArticleControllerTest {
         then(articleService).should().getArticle(articleId);
     }
 
-
+    @WithUserDetails(value = "unoTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("[view][POST] 게시글 수정 - 정상 호출")
     @Test
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
@@ -294,12 +328,16 @@ class ArticleControllerTest {
         then(articleService).should().updateArticle(eq(articleId), any(ArticleDto.class));
     }
 
+
+    @WithUserDetails(value = "unoTest", setupBefore = TestExecutionEvent.TEST_EXECUTION)
     @DisplayName("[view][POST] 게시글 삭제 - 정상 호출")
     @Test
     void givenArticleIdToDelete_whenRequesting_thenDeletesArticle() throws Exception {
         // Given
         long articleId = 1L;
-        willDoNothing().given(articleService).deleteArticle(articleId);
+        String userId = "unoTest"; //위에 쓰기 했지만 그대로 사용할수가 없어서 이렇게 사용한다
+        willDoNothing().given(articleService).deleteArticle(articleId, userId);
+
         // When & Then
         mvc.perform(
                         post("/articles/" + articleId + "/delete")
@@ -309,7 +347,7 @@ class ArticleControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/articles"))
                 .andExpect(redirectedUrl("/articles"));
-        then(articleService).should().deleteArticle(articleId);
+        then(articleService).should().deleteArticle(articleId, userId);
     }
 
 

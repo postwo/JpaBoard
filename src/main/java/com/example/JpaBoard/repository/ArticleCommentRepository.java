@@ -21,6 +21,8 @@ public interface ArticleCommentRepository extends
 
     List<ArticleComment> findByArticle_Id(Long articleId);
 
+    void deleteByIdAndUserAccount_UserId(Long articleCommentId, String userId);
+
     // customize를 통해 검색에 대한 세부적인 규칙을 다시 정할수 있다
     // 인터페이스라 원래 구현을 못하는데 java8 이후부터 구현 할 수 있게 되었다
     // like,likeignoreCase 와 containsIgnoreCase 차이점은 쿼리문이다르다  likeignoreCase(like '${v}'), containsIgnoreCase(like '%S{v}%')
