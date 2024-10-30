@@ -55,7 +55,7 @@ class ArticleControllerTest {
     private PaginationService paginationService;
 
 //    @Autowired  //생성자가 하나일 경우 일반 클래스에서는 생략할 수 있지만, 테스트 클래스에서는 일반적으로 생략하지 않는 것이 안전하다
-    public ArticleControllerTest(@Autowired MockMvc mvc, @Autowired FormDataEncoder formDataEncoder) {
+    ArticleControllerTest(@Autowired MockMvc mvc, @Autowired FormDataEncoder formDataEncoder) {
         this.mvc = mvc;
         this.formDataEncoder = formDataEncoder;
     }
@@ -65,7 +65,7 @@ class ArticleControllerTest {
     // charset == utf8이 옵션을 붙어도 동작테스트 할수 있게 contentType대신 contentTypeCompatibleWith으로 변경해준다
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 정상 호출")
     @Test
-    public void givenNothing_whenRequestingArticlesView_thenReturnsArticlesView() throws Exception {
+    void givenNothing_whenRequestingArticlesView_thenReturnsArticlesView() throws Exception {
         // Given
         given   (articleService.searchArticles(eq(null), eq(null), any(Pageable.class))).willReturn(Page.empty());
         //anyInt 아무 숫자나 넣어줘라
@@ -87,7 +87,7 @@ class ArticleControllerTest {
 
     @DisplayName("[view][GET] 게시글 리스트 (게시판) 페이지 - 검색어와 함께 호출")
     @Test
-    public void givenSearchKeyword_whenSearchingArticlesView_thenReturnsArticlesView() throws Exception {
+    void givenSearchKeyword_whenSearchingArticlesView_thenReturnsArticlesView() throws Exception {
         // Given
         SearchType searchType = SearchType.TITLE;
         String searchValue = "title";
@@ -154,7 +154,7 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view][GET] 게시글 페이지 - 정상 호출, 인증된 사용자")
     @Test
-    public void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
+    void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
         // Given
         Long articleId = 1L; //아이디
         long totalCount = 1L;
@@ -177,7 +177,7 @@ class ArticleControllerTest {
     @Disabled("구현 중")
     @DisplayName("[view][GET] 게시글 검색 전용 페이지 - 정상 호출")
     @Test
-    public void givenNothing_whenRequestingArticleSearchView_thenReturnsArticleSearchView() throws Exception {
+   void givenNothing_whenRequestingArticleSearchView_thenReturnsArticleSearchView() throws Exception {
         // Given
         // When & Then
         mvc.perform(get("/articles/search"))
@@ -190,7 +190,7 @@ class ArticleControllerTest {
 
     @DisplayName("[view][GET] 게시글 해시태그 검색 페이지 - 정상 호출")
     @Test
-    public void givenNothing_whenRequestingArticleSearchHashtagView_thenReturnsArticleSearchHashtagView() throws Exception {
+    void givenNothing_whenRequestingArticleSearchHashtagView_thenReturnsArticleSearchHashtagView() throws Exception {
         // Given
         List<String> hashtags = List.of("#java", "#spring", "#boot");
         given(articleService.searchArticlesViaHashtag(eq(null), any(Pageable.class))).willReturn(Page.empty());
@@ -214,7 +214,7 @@ class ArticleControllerTest {
 
     @DisplayName("[view][GET] 게시글 해시태그 검색 페이지 - 정상 호출, 해시태그 입력")
     @Test
-    public void givenHashtag_whenRequestingArticleSearchHashtagView_thenReturnsArticleSearchHashtagView() throws Exception {
+    void givenHashtag_whenRequestingArticleSearchHashtagView_thenReturnsArticleSearchHashtagView() throws Exception {
         // Given
         String hashtag = "#java";
         List<String> hashtags = List.of("#java", "#spring", "#boot");
@@ -241,7 +241,7 @@ class ArticleControllerTest {
     @WithMockUser //가짜(Mock) 사용자 정보를 주입하여 인증이 필요한 테스트를 수행할 수 있게 해준다
     @DisplayName("[view][GET] 새 게시글 작성 페이지")
     @Test
-    void givenNothing_whenRequesting_thenReturnsNewArticlePage() throws Exception {
+    void givenAuthorizedUser_whenRequesting_thenReturnsNewArticlePage() throws Exception {
         // Given
         // When & Then
         mvc.perform(get("/articles/form"))

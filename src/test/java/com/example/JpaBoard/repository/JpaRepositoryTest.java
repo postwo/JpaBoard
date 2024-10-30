@@ -27,7 +27,7 @@ class JpaRepositoryTest {
     private final ArticleCommentRepository articleCommentRepository;
     private final UserAccountRepository userAccountRepository;
 
-    public JpaRepositoryTest(
+    JpaRepositoryTest(
             @Autowired ArticleRepository articleRepository,
             @Autowired ArticleCommentRepository articleCommentRepository,
             @Autowired UserAccountRepository userAccountRepository
@@ -101,9 +101,9 @@ class JpaRepositoryTest {
     // 테스트를 할때만  JPA Auditing에서 createdBy와 modifiedBy를 "uno"로 고정하기 위해 사용
     @EnableJpaAuditing
     @TestConfiguration //configuration으로 등록 하는데 테스트할때만 등록 하라는 뜻이다
-    public static class TestJpaConfig {
+    static class TestJpaConfig {
         @Bean
-        public AuditorAware<String> auditorAware() {
+        AuditorAware<String> auditorAware() {
             return () -> Optional.of("uno");
         }
     }

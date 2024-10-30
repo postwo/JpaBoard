@@ -1,34 +1,31 @@
 package com.example.JpaBoard.controller;
 
-import com.example.JpaBoard.config.SecurityConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @Disabled("Spring Data Rest 통합테스트 불필요하므로 제외시킴 ")// 해당 테스트클래스에 밑의 있는 메서드들을 실행하지 못하게 한다
 @DisplayName("Data REST - API 테스트")
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
-@Import(SecurityConfig.class) //이걸 추가 안하면 401에러가 뜨면서 테스트 실패가 뜬다 (시큐리티를 추가했을경우 이걸 꼭 넣어줘야 한다)
-public class DataRestTest {
+//@Import(TestSecurityConfig.class) //이걸 추가 안하면 401에러가 뜨면서 테스트 실패가 뜬다 (시큐리티를 추가했을경우 이걸 꼭 넣어줘야 한다)
+class DataRestTest {
 
     private final MockMvc mvc;
 
-    public DataRestTest(@Autowired MockMvc mvc) {
+    DataRestTest(@Autowired MockMvc mvc) {
         this.mvc = mvc;
     }
 
