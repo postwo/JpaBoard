@@ -51,6 +51,6 @@ public class UserAccount extends AuditingFields { //유저 정보
     @Override
     public int hashCode() {
         return Objects.hash(this.getUserId());
-    }   
+    }
 
 }
