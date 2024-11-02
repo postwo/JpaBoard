@@ -9,10 +9,11 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/${database}   # 데이터베이스 초기화 전략
+#     url: jdbc:mysql://localhost:3307/${database}   # 데이터베이스 초기화 전략
+    url: jdbc:postgresql://localhost:5432/${database}
     username: ${user}
     password: ${pw}
-    driver-class-name: com.mysql.cj.jdbc.Driver
+#     driver-class-name: com.mysql.cj.jdbc.Driver
 #     url: jdbc:h2:mem:testdb  # h2 데이터베이스 테스트 용도
 #     username: sa
 #     driver-class-name: org.h2.Driver

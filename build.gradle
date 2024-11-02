@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+	runtimeOnly 'org.postgresql:postgresql'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 	// security test코드를위해 추가
@@ -43,6 +44,8 @@ dependencies {
 
 	// configuration
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
+
 
 
 	// 스프링 부트 3.0 미만
