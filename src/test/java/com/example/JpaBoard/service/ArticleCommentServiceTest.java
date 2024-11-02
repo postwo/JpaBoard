@@ -2,6 +2,7 @@ package com.example.JpaBoard.service;
 
 import com.example.JpaBoard.domain.Article;
 import com.example.JpaBoard.domain.ArticleComment;
+import com.example.JpaBoard.domain.Hashtag;
 import com.example.JpaBoard.domain.UserAccount;
 import com.example.JpaBoard.dto.ArticleCommentDto;
 import com.example.JpaBoard.dto.UserAccountDto;
@@ -18,6 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -174,7 +176,7 @@ class ArticleCommentServiceTest {
 
     private ArticleComment createArticleComment(String content) {
         return ArticleComment.of(
-                Article.of(createUserAccount(), "title", "content", "hashtag"),
+                createArticle(),
                 createUserAccount(),
                 content
         );
@@ -193,11 +195,16 @@ class ArticleCommentServiceTest {
 
 
     private Article createArticle() {
-        return Article.of(
+        Article article = Article.of(
                 createUserAccount(),
                 "title",
-                "content",
-                "#java"
+                "content"
         );
+        article.addHashtags(Set.of(createHashtag(article)));
+        return article;
+    }
+
+    private Hashtag createHashtag(Article article) {
+        return Hashtag.of("java");
     }
 }

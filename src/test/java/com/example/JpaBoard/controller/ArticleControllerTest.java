@@ -5,6 +5,7 @@ import com.example.JpaBoard.domain.constant.FormStatus;
 import com.example.JpaBoard.domain.constant.SearchType;
 import com.example.JpaBoard.dto.ArticleDto;
 import com.example.JpaBoard.dto.ArticleWithCommentsDto;
+import com.example.JpaBoard.dto.HashtagDto;
 import com.example.JpaBoard.dto.UserAccountDto;
 import com.example.JpaBoard.dto.request.ArticleRequest;
 import com.example.JpaBoard.dto.response.ArticleResponse;
@@ -78,7 +79,8 @@ class ArticleControllerTest {
                 .andExpect(view().name("articles/index"))//뷰 이름에대해 테스트 있는지 확인
                 .andExpect(model().attributeExists("articles")) //articles이 이름의 키가있는지 또는 데이터가 있는지 확인
                 .andExpect(model().attributeExists("paginationBarNumbers"))
-                .andExpect(model().attributeExists("searchTypes"));
+                .andExpect(model().attributeExists("searchTypes"))
+                .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
         then(articleService).should().searchArticles(eq(null), eq(null), any(Pageable.class));
         then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
     }
@@ -168,7 +170,8 @@ class ArticleControllerTest {
                 .andExpect(view().name("articles/detail"))
                 .andExpect(model().attributeExists("article"))
                 .andExpect(model().attributeExists("articleComments")) //댓글(1개 or 여러개)도 추가
-                .andExpect(model().attribute("totalCount", totalCount));
+                .andExpect(model().attribute("totalCount", totalCount))
+                .andExpect(model().attribute("searchTypeHashtag", SearchType.HASHTAG));
         then(articleService).should().getArticleWithComments(articleId);
         then(articleService).should().getArticleCount();
     }
@@ -240,7 +243,7 @@ class ArticleControllerTest {
     @WithMockUser //가짜(Mock) 사용자 정보를 주입하여 인증이 필요한 테스트를 수행할 수 있게 해준다
     @DisplayName("[view][GET] 새 게시글 작성 페이지")
     @Test
-    void givenAuthorizedUser_whenRequesting_thenReturnsNewArticlePage() throws Exception {
+    void givenNothing_whenRequesting_thenReturnsNewArticlePage() throws Exception {
         // Given
         // When & Then
         mvc.perform(get("/articles/form"))
@@ -258,7 +261,7 @@ class ArticleControllerTest {
     @Test
     void givenNewArticleInfo_whenRequesting_thenSavesNewArticle() throws Exception {
         // Given
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).saveArticle(any(ArticleDto.class));
         // When & Then
         mvc.perform(
@@ -290,7 +293,7 @@ class ArticleControllerTest {
     @WithMockUser
     @DisplayName("[view][GET] 게시글 수정 페이지 - 정상 호출, 인증된 사용자")
     @Test
-    void givenNothing_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
+    void givenAuthorizedUser_whenRequesting_thenReturnsUpdatedArticlePage() throws Exception {
         // Given
         long articleId = 1L;
         ArticleDto dto = createArticleDto();
@@ -311,7 +314,7 @@ class ArticleControllerTest {
     void givenUpdatedArticleInfo_whenRequesting_thenUpdatesNewArticle() throws Exception {
         // Given
         long articleId = 1L;
-        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content", "#new");
+        ArticleRequest articleRequest = ArticleRequest.of("new title", "new content");
         willDoNothing().given(articleService).updateArticle(eq(articleId), any(ArticleDto.class));
 
         // When & Then
@@ -355,7 +358,7 @@ class ArticleControllerTest {
                 createUserAccountDto(),
                 "title",
                 "content",
-                "#java"
+                Set.of(HashtagDto.of("java"))
         );
     }
 
@@ -368,7 +371,7 @@ class ArticleControllerTest {
                 Set.of(),
                 "title",
                 "content",
-                "#java",
+                Set.of(HashtagDto.of("java")),
                 LocalDateTime.now(),
                 "uno",
                 LocalDateTime.now(),
