@@ -399,6 +399,7 @@ class ArticleServiceTest {
                     createHashtag(1L, "java"),
                     createHashtag(2L, "spring")
             ));
+
             ReflectionTestUtils.setField(article, "id", id);
 
 
