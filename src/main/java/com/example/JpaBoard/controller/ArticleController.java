@@ -35,11 +35,16 @@ public class ArticleController {
             @RequestParam(name = "searchValue",required = false) String searchValue,
             @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
             ModelMap map) { // ModelMap = 컨트롤러에서 데이터를 전달하기 위한 객체로, 뷰(HTML 페이지 등)로 데이터를 넘길 때 사용
+
         Page<ArticleResponse> articles = articleService.searchArticles(searchType, searchValue, pageable).map(ArticleResponse::from);
         List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
+
         map.addAttribute("articles", articles);
         map.addAttribute("paginationBarNumbers", barNumbers);
         map.addAttribute("searchTypes", SearchType.values());
+        map.addAttribute("searchTypeHashtag", SearchType.HASHTAG);
+
+
         return "articles/index";
     }
 
@@ -48,9 +53,12 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public String article(@PathVariable("articleId") Long articleId, ModelMap map) {
         ArticleWithCommentsResponse article = ArticleWithCommentsResponse.from(articleService.getArticleWithComments(articleId));
+
         map.addAttribute("article", article);
         map.addAttribute("articleComments", article.articleCommentsResponse());
         map.addAttribute("totalCount", articleService.getArticleCount());
+        map.addAttribute("searchTypeHashtag", SearchType.HASHTAG);
+
         return "articles/detail";
     }
 
