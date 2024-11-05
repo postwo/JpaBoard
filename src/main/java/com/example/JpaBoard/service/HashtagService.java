@@ -28,7 +28,7 @@ public class HashtagService {
         if (content == null) {
             return Set.of();
         }
-        Pattern pattern = Pattern.compile("#[\\w가-힣]+");
+        Pattern pattern = Pattern.compile("#[\\w가-힣]+"); //정규식
         Matcher matcher = pattern.matcher(content.strip());
         Set<String> result = new HashSet<>();
         while (matcher.find()) {
