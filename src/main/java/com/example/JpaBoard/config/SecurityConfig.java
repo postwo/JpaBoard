@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                         .requestMatchers(HttpMethod.GET, "/", "/articles", "/articles/search-hashtag").permitAll()
+                        .requestMatchers("/api/**").permitAll() //DataRestTest를 하기 위해 개방
                         .anyRequest().authenticated()
                 )
 

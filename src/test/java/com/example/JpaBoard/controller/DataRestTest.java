@@ -1,13 +1,11 @@
 package com.example.JpaBoard.controller;
 
-import com.example.JpaBoard.config.TestSecurityConfig;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @AutoConfigureMockMvc
 @SpringBootTest
-@Import(TestSecurityConfig.class) //이걸 추가 안하면 401에러가 뜨면서 테스트 실패가 뜬다 (시큐리티를 추가했을경우 이걸 꼭 넣어줘야 한다)
+//@Import(TestSecurityConfig.class) //이걸 추가 안하면 401에러가 뜨면서 테스트 실패가 뜬다 (시큐리티를 추가했을경우 이걸 꼭 넣어줘야 한다)
 class DataRestTest {
 
     private final MockMvc mvc;
