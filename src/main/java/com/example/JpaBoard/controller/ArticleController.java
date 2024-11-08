@@ -44,7 +44,6 @@ public class ArticleController {
         map.addAttribute("searchTypes", SearchType.values());
         map.addAttribute("searchTypeHashtag", SearchType.HASHTAG);
 
-
         return "articles/index";
     }
 
@@ -71,11 +70,14 @@ public class ArticleController {
         Page<ArticleResponse> articles = articleService.searchArticlesViaHashtag(searchValue, pageable).map(ArticleResponse::from);
         List<Integer> barNumbers = paginationService.getPaginationBarNumbers(pageable.getPageNumber(), articles.getTotalPages());
         List<String> hashtags = articleService.getHashtags();
+
         System.out.println("==========>"+hashtags);
+
         map.addAttribute("articles", articles);
         map.addAttribute("hashtags", hashtags);
         map.addAttribute("paginationBarNumbers", barNumbers);
         map.addAttribute("searchType", SearchType.HASHTAG);
+
         return "articles/search-hashtag";
     }
 
