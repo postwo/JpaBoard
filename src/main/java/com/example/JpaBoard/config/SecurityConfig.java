@@ -22,9 +22,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/", "/articles", "/articles/search-hashtag").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/", "/articles", "/articles/search-hashtag","/error").permitAll()
                         .requestMatchers("/api/**").permitAll() //DataRestTest를 하기 위해 개방
                         .anyRequest().authenticated()
                 )
