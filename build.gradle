@@ -48,7 +48,8 @@ dependencies {
 	// oauth2
 	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-
+	//api 문서화를 위해 추가 //swagger-ui.html
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
 
 
 	// 스프링 부트 3.0 미만
