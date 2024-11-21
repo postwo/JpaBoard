@@ -40,7 +40,7 @@ public class UserAccount extends AuditingFields { //유저 정보
     }
 
     public static UserAccount of(String userId, String userPassword, String email, String nickname, String memo) {
-        return new UserAccount(userId, userPassword, email, nickname, memo, null);
+        return UserAccount.of(userId, userPassword, email, nickname, memo, null);
     }
 
     public static UserAccount of(String userId, String userPassword, String email, String nickname, String memo, String createdBy) {
