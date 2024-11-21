@@ -1,8 +1,9 @@
 package com.example.JpaBoard.config;
 
-import com.example.JpaBoard.dto.UserAccountDto;
 import com.example.JpaBoard.dto.security.BoardPrincipal;
-import com.example.JpaBoard.repository.UserAccountRepository;
+import com.example.JpaBoard.dto.security.KakaoOAuth2Response;
+import com.example.JpaBoard.service.UserAccountService;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,8 +12,13 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
+
+import java.util.UUID;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -20,7 +26,10 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(
+            HttpSecurity http,
+            OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService
+    ) throws Exception {
         return http
 
                 .authorizeHttpRequests(auth -> auth
@@ -35,16 +44,49 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/")
                 )
+                .oauth2Login(oAuth -> oAuth
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService)
+                        )
+                )
                 .build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserAccountRepository userAccountRepository) {
-        return username -> userAccountRepository
-                .findById(username)//데이터베이스에서 해당 username을 가진 UserAccount 정보를 가져와서 이거를 매개변수로 사용한다
-                .map(UserAccountDto::from)
+    public UserDetailsService userDetailsService(UserAccountService userAccountService) {
+        return username -> userAccountService
+                .searchUser(username)
                 .map(BoardPrincipal::from)
                 .orElseThrow(() -> new UsernameNotFoundException("유저를 찾을 수 없습니다 - username: " + username)); //findbyid가 optional이 붙기 때문에 이렇게 처리해줘야 한다
+    }
+
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService(
+            UserAccountService userAccountService,
+            PasswordEncoder passwordEncoder
+    ) {
+        final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+        return userRequest -> {
+            OAuth2User oAuth2User = delegate.loadUser(userRequest);
+            KakaoOAuth2Response kakaoResponse = KakaoOAuth2Response.from(oAuth2User.getAttributes());
+            String registrationId = userRequest.getClientRegistration().getRegistrationId();
+            String providerId = String.valueOf(kakaoResponse.id());
+            String username = registrationId + "_" + providerId;
+            String dummyPassword = passwordEncoder.encode("{bcrypt}" + UUID.randomUUID());
+            return userAccountService.searchUser(username)
+                    .map(BoardPrincipal::from)
+                    .orElseGet(() ->
+                            BoardPrincipal.from(
+                                    userAccountService.saveUser(
+                                            username,
+                                            dummyPassword,
+                                            kakaoResponse.email(),
+                                            kakaoResponse.nickname(),
+                                            null
+                                    )
+                            )
+                    );
+        };
     }
 
     @Bean
