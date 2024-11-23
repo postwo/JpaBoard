@@ -42,7 +42,7 @@ dependencies {
 	// 타임리프
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
-	// configuration
+	// Spring Configuration Processor == 이거는 설정파일을 등록하기 위해사용 JpaBoardApplicationTests에서 lombok에설정한거 보면 된다
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 
 	// oauth2
