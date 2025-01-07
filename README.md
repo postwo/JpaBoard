@@ -211,3 +211,9 @@ https://www.guru99.com/ko/postgresql-create-alter-add-user.html
 
 # 댓글 수정
 github에서 #댓글 업데이트 기능의 삭제  이거를 repository에서 검색해서 보기 
+
+# 인증 기능고도화 카카오톡으로 로그인(1) 이부분에서 oauth설정하는 방법있음(배포한 url 넣는 방법도 있음)(매우 중요)
+
+# javadoc 사용법 알아두기
+
+# https://springdoc.org/
