@@ -80,12 +80,19 @@ public class SecurityConfig {
     ) {
         final DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         return userRequest -> {
+
             OAuth2User oAuth2User = delegate.loadUser(userRequest);
+
             KakaoOAuth2Response kakaoResponse = KakaoOAuth2Response.from(oAuth2User.getAttributes());
+
             String registrationId = userRequest.getClientRegistration().getRegistrationId();
+
             String providerId = String.valueOf(kakaoResponse.id());
+
             String username = registrationId + "_" + providerId;
+
             String dummyPassword = passwordEncoder.encode("{bcrypt}" + UUID.randomUUID());
+
             return userAccountService.searchUser(username)
                     .map(BoardPrincipal::from)
                     .orElseGet(() ->
